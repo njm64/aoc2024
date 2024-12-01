@@ -7,8 +7,7 @@ parse :: [String] -> [[Int]]
 parse = transpose . map (map read . words)
     
 part1 [list1, list2] =
-    sum . map distance $ zip (sort list1) (sort list2)
-        where distance (a, b) = abs (a - b)
+    sum [abs (a - b) | (a,b) <- zip (sort list1) (sort list2)]
 
 part2 [list1, list2] = 
     sum [i | i <- list1, j <- list2, i == j]
