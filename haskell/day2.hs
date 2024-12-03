@@ -15,7 +15,7 @@ dampenedSafe :: [Int] -> Bool
 dampenedSafe xs = any safe xss
   where xss = xs : [removeNth i xs | i <- [0..length xs-1]] 
 
-removeNth :: [a] -> Int -> [a]
+removeNth :: Int -> [a] -> [a]
 removeNth n xs = (take n xs) ++ (drop (n + 1) xs)
 
 part1 = length . filter safe
