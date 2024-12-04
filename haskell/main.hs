@@ -4,9 +4,10 @@ import Data.Maybe
 import qualified Day1 
 import qualified Day2 
 import qualified Day3
+import qualified Day4
 
 runners = [
-  Day1.run, Day2.run, Day3.run]
+  Day1.run, Day2.run, Day3.run, Day4.run]
   
 parseInt :: String -> Maybe Int
 parseInt s = case reads s of
