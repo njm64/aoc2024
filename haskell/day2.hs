@@ -8,7 +8,7 @@ inRange :: Int -> Bool
 inRange n = n >= 1 && n <= 3
 
 safe :: [Int] -> Bool
-safe ns = all inRange deltas || all inRange (map negate deltas)
+safe ns = all inRange deltas || all (inRange . negate) deltas
   where deltas = [a - b | (a, b) <- zip ns (tail ns)]
 
 dampenedSafe :: [Int] -> Bool

@@ -1,6 +1,5 @@
 module Day3 where
 import Aoc qualified
-import Data.List
 import Data.Char
 import Data.Maybe
 import Data.List
@@ -47,4 +46,3 @@ part2 = go 0 True
         go total enabled (_:cs) = go total enabled cs
 
 run = Aoc.run 3 parse part1 part2
-
