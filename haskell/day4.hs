@@ -9,9 +9,7 @@ parse :: [String] -> WordMap
 parse lines =
   let width = length (head lines) in
   let height = length lines in
-  let coords = [(x, y) | y <- [1..height], x <- [1..width]] in
-  let chars = concat lines in
-  array ((1,1), (width, height)) (zip coords chars)
+  listArray ((1,1), (width, height)) (concat lines)
 
 countAtPoint :: WordMap -> Coord -> Int
 countAtPoint m (x,y) = length $ filter checkDir dirs
