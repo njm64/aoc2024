@@ -22,24 +22,30 @@ startPosition m =
 isValidPosition :: Map -> Position -> Bool
 isValidPosition m p = (inRange (bounds m) p ) && (m ! p) /= '#'
 
-getVec North = (0, -1)
-getVec South = (0, 1)
-getVec West = (-1, 0)
-getVec East = (1, 0)
-
 nextDir :: Direction -> Direction
 nextDir West = North
 nextDir d = succ d
 
 nextSegment :: Map -> Position -> Direction -> [Position]
-nextSegment m (x,y) d =
-  takeWhile (isValidPosition m) (zip [x,x+dx..] [y,y+dy..])
-    where (dx,dy) = getVec d
+nextSegment m p d = takeWhile (isValidPosition m) (iterate (move d) p)
+  where move North (x,y) = (x, y-1)
+        move South (x,y) = (x, y+1)
+        move East (x,y) = (x+1, y)
+        move West (x,y) = (x-1, y)
 
 isEdgePosition :: Map -> Position -> Bool
 isEdgePosition m (x,y) =
   let ((x1,y1),(x2,y2)) = bounds m in
   x == x1 || x == x2 || y == y1 || y == y2
+
+getAllPoints :: Map -> [Position]
+getAllPoints m = go (startPosition m) North []
+  where 
+    go p d segs
+      | isEdgePosition m p = nub $ concat segs
+      | otherwise =
+        let s = nextSegment m p d in
+        go (last s) (nextDir d) (s:segs) 
 
 checkCycle :: Map -> Bool
 checkCycle m = go (startPosition m) North []
@@ -53,18 +59,12 @@ checkCycle m = go (startPosition m) North []
         (s `elem` states) || go p' d' (s:states)
 
 part1 :: Map -> Int
-part1 m = go (startPosition m) North []
-  where 
-    go p d segs
-      | isEdgePosition m p = length . nub $ concat segs
-      | otherwise =
-        let s = nextSegment m p d in
-        go (last s) (nextDir d) (s:segs) 
+part1 = length . getAllPoints
 
 part2 :: Map -> Int
 part2 m = 
   let start = startPosition m in
-  let maps = [m // [(p, '#')] | p <- indices m, p /= start] in
+  let maps = [m // [(p, '#')] | p <- getAllPoints m, p /= start] in
   length $ filter checkCycle maps
 
 run = Aoc.run 6 parse part1 part2
