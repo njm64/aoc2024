@@ -2,7 +2,10 @@ module Util where
 
 import qualified Data.List as List
 import qualified Data.Text as Text
+import qualified Data.Map as Map
 import Data.Array
+import System.IO.Unsafe
+import Data.IORef
 
 -- Split a list exactly once at the given delimiter
 splitPair :: Eq a => a -> [a] -> ([a], [a])
@@ -77,3 +80,17 @@ updateNth f i (x:xs) = x : updateNth f (i-1) xs
 -- Create an array with a default value in every cell
 arrayWithDefault :: Ix i => (i, i) -> a -> Array i a
 arrayWithDefault b def = array b [(i, def) | i <- range b]
+
+-- From https://stackoverflow.com/questions/141650/how-do-you-make-a-generic-memoize-function-in-haskell
+memoize :: Ord a => (a -> b) -> (a -> b)
+memoize f = unsafePerformIO $ do 
+    r <- newIORef Map.empty
+    return $ \x -> unsafePerformIO $ do 
+        m <- readIORef r
+        case Map.lookup x m of
+            Just y  -> return y
+            Nothing -> do 
+                    let y = f x
+                    writeIORef r (Map.insert x y m)
+                    return y
+
