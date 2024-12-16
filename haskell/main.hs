@@ -12,10 +12,11 @@ import qualified Day8
 import qualified Day9
 import qualified Day10
 import qualified Day11
+import qualified Day12
 
 runners = [
   Day1.run, Day2.run, Day3.run, Day4.run, Day5.run, Day6.run,
-  Day7.run, Day8.run, Day9.run, Day10.run, Day11.run]
+  Day7.run, Day8.run, Day9.run, Day10.run, Day11.run, Day12.run]
   
 parseInt :: String -> Maybe Int
 parseInt s = case reads s of
