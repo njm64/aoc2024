@@ -40,6 +40,9 @@ replace from to =
 listToPair :: [a] -> (a, a)
 listToPair [a,b] = (a, b)
 
+map3 :: (a -> b) -> (a, a, a) -> (b, b, b)
+map3 f (a, b, c)  = (f a, f b, f c)
+
  -- Find the first index of a substring
 position :: String -> String -> Int
 position s substr =
