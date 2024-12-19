@@ -4,8 +4,6 @@ import System.IO
 import System.CPUTime
 import Text.Printf
 
-testMode = False
-
 inputDir testMode
   | testMode = "../test"
   | otherwise = "../input"

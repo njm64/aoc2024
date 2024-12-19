@@ -80,6 +80,10 @@ updateNth f _ [] = []
 updateNth f 0 (x:xs) = f x : updateNth f (-1) xs
 updateNth f i (x:xs) = x : updateNth f (i-1) xs
   
+-- Apply a function N times
+applyN :: Int -> (a -> a) -> a -> a
+applyN n f a = (iterate f a) !! n
+
 -- Create an array with a default value in every cell
 arrayWithDefault :: Ix i => (i, i) -> a -> Array i a
 arrayWithDefault b def = array b [(i, def) | i <- range b]
