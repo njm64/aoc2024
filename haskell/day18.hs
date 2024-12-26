@@ -10,6 +10,10 @@ import Heap
 type Pos = (Int, Int)
 type Map = Array Pos Char
 
+maxPos = 70 
+start = (0,0)
+goal = (maxPos, maxPos)
+
 parse :: [String] -> [Pos]
 parse = map parsePos
 
@@ -18,16 +22,16 @@ parsePos s =
   let (lhs, rhs) = splitPair ',' s in
   (read lhs, read rhs)
 
-buildMap :: Int -> [Pos] -> Map
-buildMap n ps =
-  let a = listArray ((0, 0), (n, n)) (repeat '.') in
+buildMap :: [Pos] -> Map
+buildMap ps =
+  let a = listArray (start, goal) (repeat '.') in
   a // [(p, '#') | p <- ps]
 
 neighbours :: Pos -> [Pos]
 neighbours (x, y) = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
-solve :: Map -> Pos -> Pos -> Maybe Int
-solve m start goal =
+solve :: Map -> Maybe Int
+solve m =
   go (Heap.push Heap.empty 0 start) Map.empty where
     go heap costMap =
       case Heap.top heap of
@@ -48,12 +52,13 @@ solve m start goal =
                              Just existing -> cost < existing
                              Nothing -> True
 
-part1 ps =
-  let m = buildMap 70 (take 1024 ps) in
-  let (start, end) = (bounds m) in
-  fromJust $ solve m start end
+part1 = show . fromJust . solve . buildMap . take 1000
 
-part2 = part1
+-- Takes about 6 seconds on my machine. If we cared more
+-- about performance this could be a binary search.
+part2 ps = 
+  show $ head [last ps' | ps' <- inits ps, isBlocked ps']
+    where isBlocked = isNothing . solve . buildMap
 
 run = Aoc.run 18 parse part1 part2
 
